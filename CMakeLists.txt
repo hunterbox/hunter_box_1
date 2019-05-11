@@ -11,8 +11,18 @@ target_include_directories(
 
 # Installation (https://github.com/forexample/package-example) {
 
-set(config_install_dir "lib/cmake/${PROJECT_NAME}")
-set(include_install_dir "include")
+# Introduce variables:
+# * CMAKE_INSTALL_LIBDIR
+# * CMAKE_INSTALL_BINDIR
+# * CMAKE_INSTALL_INCLUDEDIR
+# * CMAKE_INSTALL_DATADIR
+include(GNUInstallDirs)
+
+# Layout. This works for all platforms:
+#   * <prefix>/share/<PROJECT-NAME>/cmake/
+#   * <prefix>/lib*/
+#   * <prefix>/include/
+set(config_install_dir "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/cmake")
 
 set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
 
@@ -39,17 +49,17 @@ configure_package_config_file(
 )
 
 install(
-    TARGETS hunter_box_1
+    TARGETS ${PROJECT_NAME}
     EXPORT "${TARGETS_EXPORT_NAME}"
-    LIBRARY DESTINATION "lib"
-    ARCHIVE DESTINATION "lib"
-    RUNTIME DESTINATION "bin"
-    INCLUDES DESTINATION "${include_install_dir}"
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
 )
 
 install(
     FILES hunter_box_1.hpp
-    DESTINATION "${include_install_dir}"
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
 )
 
 install(
